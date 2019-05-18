@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}权限列表页面{% endblock %}
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/to-do.css">
+{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+
+          	<h3><i class="fa fa-angle-right"></i> Auth List </h3>
+
+
+            <div class="row mt mb">
+                  <div class="col-md-12">
+                      <section class="task-panel tasks-widget">
+	                	<div class="panel-heading">
+	                        <div class="pull-left"><h5><i class="fa fa-tasks"></i> 权限列表</h5></div>
+	                        <br>
+	                 	</div>
+                          <div class="panel-body">
+                              <div class="task-content">
+                                  <ul id="sortable" class="task-list">
+                                      {% for auth in auths %}
+                                      <li class="list-primary">
+                                          <i class=" fa fa-ellipsis-v"></i>
+{#                                          <div class="task-checkbox">#}
+{#                                              <input type="checkbox" class="list-child" value=""  />#}
+{#                                          </div>#}
+                                          <div class="task-title">
+                                              <span class="task-title-sp">{{ auth.name }}</span>
+                                              <span class="badge bg-theme">{{ auth.url }}</span>
+                                              <div class="pull-right hidden-phone">
+{#                                                  <button class="btn btn-success btn-xs fa fa-check"></button>#}
+                                                  <a href="{% url 'auth_edit' auth.id %}" class="btn btn-primary btn-xs fa fa-pencil"></a>
+                                                  <a href="{% url 'auth_delete' auth.id%}" class="btn btn-danger btn-xs fa fa-trash-o" onclick="ensure()"></a>
+                                              </div>
+                                          </div>
+                                      </li>
+                                      {% endfor %}
+
+
+
+                                  </ul>
+                              </div>
+                              <div class=" add-task-row">
+                                  <a class="btn btn-success btn-sm pull-left" href="{% url 'auth_add' %}">Add New Type</a>
+{#                                  <a class="btn btn-default btn-sm pull-right" href="todo_list.html#">See All Tasks</a>#}
+                              </div>
+                          </div>
+                      </section>
+                  </div><!--/col-md-12 -->
+              </div><!-- /row -->
+
+      <!--main content end-->
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                      {% if authsPageObj.has_previous %}
+                    <li >
+                      <a href="{% url 'auth_list' %}?page={{ authsPageObj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% endif %}
+
+                      {% for page in authsPageObj.paginator.page_range %}
+                          {% if page == authsPageObj.number %}
+                          <li class="active"><a href="{% url 'auth_list' %}?page={{ page }}">{{ page}}</a></li>
+                          {% else %}
+                          <li><a href="{% url 'auth_list' %}?page={{ page }}">{{ page}}</a></li>
+                          {% endif %}
+                      {% endfor %}
+
+                    {% if authsPageObj.has_next %}
+                    <li>
+                      <a href="{% url 'auth_list' %}?page={{ authsPageObj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+    <script type="text/javascript">
+        function ensure() {
+                if(confirm("确定删除吗")){
+                    alert("删除成功");
+                    return true;
+                }
+                return false;
+        }
+
+   </script>
+{% endblock %}
+{% block script %}
+    <script src="/static/js/jquery-ui.js"></script>
+    <script src="/static/assets/js/tasks.js" type="text/javascript"></script>
+{% endblock %}

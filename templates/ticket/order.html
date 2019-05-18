@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}订单页面{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+
+            <h3><i class="fa fa-angle-right"></i> 订单详情</h3>
+
+          	<!-- BASIC FORM ELELEMNTS -->
+          	<div class="row mt">
+          		<div class="col-lg-12">
+                  <div class="form-panel">
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> 请仔细核对订单</h4>
+{#                      <p><span class="js-wait"></span>s后自动跳转至剧目列表</p>#}
+                      <form class="form-horizontal style-form" method="post" action="{% url 'seat_buy' schedule.id %}?id_str={{ ids }}">
+
+
+                            {% csrf_token %}
+                          <div class="form-group" >
+                              <div class="" style="font-size: large">
+                                  <span class="col-lg-offset-1" >影片: {{ schedule.play.name }}</span>
+                              </div>
+                              <div class="" style="font-size: large">
+                                  <span class="col-lg-offset-1">影厅: {{ schedule.studio.name }}</span>
+                              </div>
+                              <div class="" style="font-size: large">
+                                  <span class="col-lg-offset-1">时间: {{ schedule.show_time }}</span>
+                              </div>
+                              <div class="" style="font-size: large">
+                                  <span class="col-lg-offset-1">票价: ￥{{ schedule.ticket_money }}/张</span>
+                              </div>
+
+                              <div class="" id="show_seats">
+                                  <span style="font-size: large" id="0" class="col-lg-offset-1">座位: </span>
+                                  {% for seat in seats %}
+                                      <span class="label label-danger" style="font-size: large">{{ seat.row_id }}排{{ seat.col_id }}列</span>
+
+                                  {% endfor %}
+
+                              </div>
+                                <br>
+
+                              <div class="">
+                                  <div class="col-lg-offset-1">
+                                      <input class="btn btn-danger" type="submit" value="确认购买" >
+
+                                  </div>
+
+                              </div>
+                          </div>
+                      </form>
+                      <a class="btn btn-default "  href="{% url 'ticket_seat' schedule.id%}">返回</a>
+
+                  </div>
+          		</div><!-- col-lg-12-->
+          	</div><!-- /row -->
+
+      <!--main content end-->
+{#    <script src="/static/js/moment.js"></script>#}
+    <script>
+
+
+                    {#var cur=new Date().toUTCString();#}
+                    {##}
+                    {#var y="{{ order_time.year }}";#}
+                    {#var m="{{ order_time.month }}";#}
+                    {#var d="{{ order_time.day }}";#}
+                    {#var h="{{ order_time.hour }}";#}
+                    {#var M="{{ order_time.minute }}";#}
+                    {#var s="{{ order_time.second }}";#}
+                    {#alert(m-1);#}
+                    {#var create_time=new Date(y,m-1,d,h,M,s);#}
+                    {##}
+                    {##}
+                    {##}
+                    {#alert(cur);#}
+                    {#var cur_time=new Date().toUTCString("{{ order_time }}");#}
+                    {##}
+                    {#var str_time=cur.toString();#}
+                    {#alert(str_time);#}
+                    {#alert(cur.time);#}
+                    {#alert(create_time);#}
+        {#alert(cur_time);#}
+        {#$(".js-wait").html(cur_time);#}
+
+                    {#var timer;#}
+                    {#var timewait = 60;#}
+                    {#times ();#}
+                    {#function times () {#}
+                    {#    if(timewait == 1){#}
+                    {#        window.location.href = "{% url 'ticket_seat' schedule.id %}";#}
+                    {#        clearTimeout(timer);#}
+                    {#    }else{#}
+                    {#        timewait--;#}
+                    {#        timer = setTimeout(function  () {#}
+                    {#            times();#}
+                    {#        },1000)#}
+                    {#    }#}
+                    {#    $(".js-wait").html(timewait);#}
+                    {# }#}
+    </script>
+
+{% endblock %}

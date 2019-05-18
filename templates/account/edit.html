@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}编辑用户信息页面{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+
+            <h3><i class="fa fa-angle-right"></i> Edit Account Form </h3>
+
+          	<!-- BASIC FORM ELELEMNTS -->
+          	<div class="row mt">
+          		<div class="col-lg-12">
+                  <div class="form-panel">
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> 编辑用户信息</h4>
+                      <form class="form-horizontal style-form" method="post" action="{% url 'account_edit' account.id%}">
+
+
+                            {% csrf_token %}
+{#                            {{ form }}#}
+
+
+                          <div class="form-group">
+                              <label  class="col-sm-2 col-sm-2 control-label">用户名/邮箱</label>
+                              <div class="col-sm-10">
+                                  <input type="email" name="email" class="form-control round-form" value="{{ account.email }}">
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                              <label  class="col-sm-2 col-sm-2 control-label">名字</label>
+                              <div class="col-sm-10">
+                                  <input type="text" name="name" class="form-control round-form" value="{{ account.name }}">
+                              </div>
+                          </div>
+
+
+                          <div class="form-group">
+                                  <label class="col-sm-2 col-sm-2 control-label">角色</label>
+                                  <div class="col-sm-10">
+                                      <select  class="form-control" name="role" >
+                                          {% for role in roles %}
+                                              {% if role == account.role %}
+{#                                                获取值#}
+{#                                              <option id="{{ type.id }}">{{ type.name }}</option>#}
+{#                                            获取id#}
+                                                    <option selected="selected" value="{{ role.id }}">{{ role.name }}</option>
+                                              {% else %}
+                                                    <option value="{{ role.id }}">{{ role.name }}</option>
+                                              {% endif %}
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                          </div>
+
+
+
+                          <div class="form-group">
+                              <div class="col-sm-12">
+                                  <input class="btn btn-theme" type="submit" value="提交编辑">
+                              </div>
+
+                          </div>
+
+
+                      </form>
+                  </div>
+          		</div><!-- col-lg-12-->
+          	</div><!-- /row -->
+
+      <!--main content end-->
+
+
+{% endblock %}

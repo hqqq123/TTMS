@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}编辑角色页面{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+
+            <h3><i class="fa fa-angle-right"></i> Edit Role Form</h3>
+
+          	<!-- BASIC FORM ELELEMNTS -->
+          	<div class="row mt">
+          		<div class="col-lg-12">
+                  <div class="form-panel">
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> 编辑角色</h4>
+                      <form class="form-horizontal style-form" method="post" action="{% url 'role_edit' role.id%}">
+
+
+                            {% csrf_token %}
+
+                          <div class="form-group">
+                              <label  class="col-sm-2 col-sm-2 control-label">角色名称</label>
+                              <div class="col-sm-10">
+                                  <input type="text" name="name" class="form-control round-form" placeholder="请输入角色名" value="{{ role.name }}">
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                                  <label class="col-sm-2 col-sm-2 control-label">拥有权限</label>
+                                  <div class="col-sm-10">
+                                      <select  class="form-control" name="auths" multiple>
+                                          {% for auth in auths %}
+                                              {% if auth in role.auths.all %}
+                                                <option value="{{ auth.id }}" selected="selected">{{ auth.name }}</option>
+
+                                              {% else %}
+    {#                                            获取值#}
+    {#                                          <option id="{{ type.id }}">{{ type.name }}</option>#}
+    {#                                        获取id#}
+                                                <option value="{{ auth.id }}">{{ auth.name }}</option>
+                                              {% endif %}
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                          </div>
+
+
+
+                          <div class="form-group">
+                              <div class="col-sm-12">
+                                  <input class="btn btn-theme" type="submit" value="编辑角色">
+                              </div>
+
+                          </div>
+
+
+                      </form>
+                  </div>
+          		</div><!-- col-lg-12-->
+          	</div><!-- /row -->
+
+      <!--main content end-->
+    <script>
+
+        var time="{{schedule.show_time.year }}"+"-";
+        var month={{ schedule.show_time.month }};
+        {#alert(month);#}
+        if (month<10)
+            time=time+"0";
+        time=time+month+"-"
+        var day={{ schedule.show_time.day }};
+        if (day<10)
+            time=time+"0";
+        time=time+day+"T";
+        var hour={{ schedule.show_time.hour }};
+        if (hour<10)
+            time+="0";
+        time+=hour+":";
+        var minute={{ schedule.show_time.minute }};
+        if (minute<10)
+            time+="0";
+        time+=minute;
+        document.getElementById("show_time").value=time
+
+
+    </script>
+
+{% endblock %}

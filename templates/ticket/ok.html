@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}成功页面{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+
+            <h3><i class="fa fa-angle-right"></i> Success</h3>
+
+          	<!-- BASIC FORM ELELEMNTS -->
+          	<div class="row mt">
+          		<div class="col-lg-12">
+                  <div class="form-panel">
+                      <div class="storageVolumes clearfix control_main_disk_right" ng-controller="buySucceedCtrl">
+                            <!-- 购买成功 -->
+                            <div class="text-center">
+{#                                <img src="images/storage/v3-buySucceed-icon.png" alt="" />#}
+                                <strong>购买成功！</strong>
+                                <p><span class="js-wait"></span>s后自动跳转至剧目列表</p>
+                            </div>
+{#                        #}
+{#                            <!-- 返回 -->#}
+{#                            <div class="back-disk-console">#}
+{#                                <span >返回</span>#}
+{#                            </div>#}
+{#                        </div> #}
+{#                      <div class="text-center">#}
+{#                          <h4 style="font-size: large">购买成功！</h4>#}
+{#                      </div>#}
+{#                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> 添加剧目类型</h4>#}
+{#                      <form class="form-horizontal style-form" method="post" action="{% url 'type_add' %}">#}
+{##}
+{##}
+{#                            {% csrf_token %}#}
+{##}
+{##}
+{#                          <div class="form-group">#}
+{#                              <label  class="col-sm-2 col-sm-2 control-label">类型名称</label>#}
+{#                              <div class="col-sm-10">#}
+{#                                  <input type="text" name="name" class="form-control round-form">#}
+{#                              </div>#}
+{#                          </div>#}
+{#                          <div class="form-group">#}
+{#                              <div class="col-sm-12">#}
+{#                                  <input class="btn btn-theme" type="submit" value="添加演出厅">#}
+{#                              </div>#}
+{##}
+{#                          </div>#}
+{##}
+{##}
+{#                      </form>#}
+                  </div>
+          		</div><!-- col-lg-12-->
+          	</div><!-- /row -->
+
+      <!--main content end-->
+
+                <script>
+
+                    var timer;
+                    var timewait = 6;
+                    times ();
+                    function times () {
+                        if(timewait == 1){
+                            window.location.href = "{% url 'ticket_sale' %}";
+                            clearTimeout(timer);
+                        }else{
+                            timewait--;
+                            timer = setTimeout(function  () {
+                                times();
+                            },1000)
+                        }
+                        $(".js-wait").html(timewait);
+                    }
+                </script>
+
+{% endblock %}

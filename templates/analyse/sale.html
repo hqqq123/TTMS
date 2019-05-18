@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% block title %}用户列表页面{% endblock %}
+{% block content %}
+
+
+
+
+                <h3><i class="fa fa-angle-right"></i> Chartjs Charts</h3>
+              <!-- page start-->
+              <div class="tab-pane" id="chartjs">
+                  <div class="row mt">
+                      <div class="col-lg-6">
+                          <div id="play_count" style="width: 400px;height:300px;"></div>
+{#                          <div class="content-panel" id="main">#}
+{#							  <h4><i class="fa fa-angle-right"></i> Doughnut</h4>#}
+{#                              <div class="panel-body text-center">#}
+{#                                  <canvas id="doughnut" height="300" width="400"></canvas>#}
+{#                              </div>#}
+{#                          </div>#}
+                      </div>
+                      <div class="col-lg-6">
+                          <div id="play_money" style="width: 400px;height:300px;"></div>
+{#                          <div class="content-panel">#}
+{#							  <h4><i class="fa fa-angle-right"></i> Line</h4>#}
+{#                              <div class="panel-body text-center">#}
+{#                                  <canvas id="line" height="300" width="400"></canvas>#}
+{#                              </div>#}
+{#                          </div>#}
+                      </div>
+                  </div>
+                  <div class="row mt">
+                      <div class="col-lg-6">
+                          <div class="content-panel">
+							  <h4><i class="fa fa-angle-right"></i> Radar</h4>
+                              <div class="panel-body text-center">
+                                  <canvas id="radar" height="300" width="400"></canvas>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-6">
+                          <div class="content-panel">
+							  <h4><i class="fa fa-angle-right"></i> Polar Area</h4>
+                              <div class="panel-body text-center">
+                                  <canvas id="polarArea" height="300" width="400"></canvas>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row mt">
+                      <div class="col-lg-6">
+                          <div class="content-panel">
+							  <h4><i class="fa fa-angle-right"></i> Bar</h4>
+                              <div class="panel-body text-center">
+                                  <canvas id="bar" height="300" width="400"></canvas>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-6">
+                          <div class="content-panel">
+							  <h4><i class="fa fa-angle-right"></i> Pie</h4>
+                              <div class="panel-body text-center">
+                                  <canvas id="pie" height="300" width="400"></canvas>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+{#    {% block scripts %}#}
+
+    <script type="text/javascript">
+
+        var myChart_play_count = echarts.init(document.getElementById('play_count'));
+
+        $.ajax({
+            type:'get',
+            url:"{% url 'analisis_play_count' %}",
+            dataType:"json",
+            success:function (res) {
+                var option = {
+                        title: {
+                            text: ' 剧目销售数量对比'
+                        },
+                        tooltip: {},
+                        legend: {
+                            data:['销量']
+                        },
+                        xAxis: {
+                            data:res['plays']
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '销量',
+                            type: 'bar',
+                            data: res['counts']
+                        }]
+                };
+                myChart_play_count.setOption(option);
+
+            },
+
+
+        });
+        var myChart_play_money = echarts.init(document.getElementById('play_money'));
+
+
+        $.ajax({
+            type:'get',
+            url:"{% url 'analisis_play_money' %}",
+            dataType:"json",
+            success:function (res) {
+
+
+                var option = {
+                    backgroundColor: '#2c343c',
+
+                    title: {
+                        text: '剧目销售价格对比',
+                        left: 'center',
+                        top: 20,
+                        textStyle: {
+                            color: '#ccc'
+                        }
+                    },
+
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+
+                    visualMap: {
+                        show: false,
+                        min: 80,
+                        max: 600,
+                        inRange: {
+                            colorLightness: [0, 1]
+                        }
+                    },
+                    series : [
+                        {
+                            name:'访问来源',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '50%'],
+                            {#[{'value': 335, 'name': '直接访问'}, {'value': 310, 'name': '邮件营销'}]#}
+                            data:res['info'].sort(function (a, b) { return a.value - b.value; }),
+                            roseType: 'radius',
+                            label: {
+                                normal: {
+                                    textStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    lineStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    },
+                                    smooth: 0.2,
+                                    length: 10,
+                                    length2: 20
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531',
+                                    shadowBlur: 200,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+
+                            animationType: 'scale',
+                            animationEasing: 'elasticOut',
+                            animationDelay: function (idx) {
+                                return Math.random() * 200;
+                            }
+                        }
+                    ]
+                };
+                myChart_play_money.setOption(option);
+
+
+
+
+            },
+            error:function () {
+                alert("456456");
+            }
+
+
+        });
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% macro paginate(PageObj, viewFun) %}
+
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                      {% if PageObj.has_previous %}
+                    <li >
+                      <a href="{% url viewFun %}?page={{ PageObj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% endif %}
+
+                      {% for page in PageObj.paginator.page_range %}
+                          {% if page == PageObj.number %}
+                          <li class="active"><a href="{% url viewFun %}?page={{ page }}">{{ page}}</a></li>
+                          {% else %}
+                          <li><a href="{% url viewFun %}?page={{ page }}">{{ page}}</a></li>
+                          {% endif %}
+                      {% endfor %}
+
+                    {% if PageObj.has_next %}
+                    <li>
+                      <a href="{% url viewFun %}?page={{ PageObj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+{% endmacro %}

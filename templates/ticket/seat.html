@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block title %}选座{% endblock %}
+
+{% block content %}
+            <h3><i class="fa fa-angle-right"></i> 选座购票</h3>
+            <div class="row mt">
+                  <div class="col-md-12">
+                      <div class="content-panel">
+{#                          <table class="table table-striped table-advance table-hover">#}
+{#	                  	  	  <h4><i class="fa fa-angle-right"></i> </h4>#}
+
+                          <div class="container">
+
+                                <img src="/static/img/enable.png">
+                                <span>可选座位</span>
+
+
+                                <img src="/static/img/sale.png" class="col-lg-offset-1">
+
+                                <span>已售座位</span>
+
+                                <img src="/static/img/select.png" class="col-lg-offset-1">
+
+                                <span>已选座位</span>
+
+                          </div>
+                          <hr>
+                          <h3 class="center col-lg-offset-4">银幕中央</h3>
+                          {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <strong>{{ message }}</strong>
+                        </div>
+
+
+
+
+
+                    {% endfor %}
+                          <br>
+                          <br>
+                          <div id="seats" class="text-center">
+
+
+                          </div>
+                          <br>
+                          <br>
+                          <div class="container" style="font-size: large">
+                              <span>影片: {{ schedule.play.name }}</span>
+                              <span class="col-lg-offset-1">影厅: {{ schedule.studio.name }}</span>
+                              <span class="col-lg-offset-1">时间: {{ schedule.show_time }}</span>
+                              <span class="col-lg-offset-1">票价: ￥{{ schedule.ticket_money }}/张</span>
+                          </div>
+                          <br>
+                          <div class="container" id="show_seats">
+                              <span style="font-size: large" id="0">座位: </span>
+
+                         </div>
+                          <br>
+                          <div class="container">
+                              <a class="btn btn-danger" style="border-radius: 20px" id="ok" onclick="test()">确认购买</a>
+                          </div>
+
+
+                      </div><!-- /content-panel -->
+                  </div><!-- /col-md-12 -->
+            </div><!-- /row -->
+    <script>
+        window.onload=function() {
+
+
+        var seats=document.getElementById("seats");
+        {% for row in seats %}
+                var div_row=document.createElement("div");
+                div_row.class="container";
+                {% for col in row %}
+                    var img=document.createElement("img");
+
+                    {% if col.status %}
+                        {#var schedule={{ schedule }};#}
+                        {#var ticket=col.ticket_set.filter(schedule=schedule);#}
+                        {#alert(ticket);#}
+                        {#{% if ticket %}#}
+                        {#    img.src="/static/img/sale.png";#}
+                        {#{% else %}#}
+                        {#    img.src="/static/img/enable.png";#}
+                        {#{% endif %}#}
+
+                        {% for ticket in col.ticket_set.all %}
+                            {#alert("{{ col.id }}+{{ ticket.schedule.id }}+{{ schedule.id }}");#}
+                            {% if ticket.schedule.id == schedule.id %}
+                                {#alert("{{ col.id }}");#}
+                                img.src="/static/img/sale.png";
+{#                                {{ forloop.last }}=True;#}
+
+                            {% else %}
+                                if(img.src=="http://127.0.0.1:8000/static/img/sale.png"){
+
+                                }else {
+                                    {#alert(img.src);#}
+                                    img.src="/static/img/enable.png";
+                                }
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% else %}
+                        img.src="/static/img/enable.png";
+                        var div=document.getElementById("show_seats");
+                    {% endif %}
+                    img.onclick=function () {
+                            if (this.src=="http://127.0.0.1:8000/static/img/select.png")
+                            {
+
+                                {#alert('11');#}
+                                this.src="/static/img/enable.png";
+                                var id={{ col.id }};
+                                var seat=document.getElementById(id);
+                                div.removeChild(seat);
+                            } else if(this.src=="http://127.0.0.1:8000/static/img/sale.png")
+                            {
+
+
+                            }else{
+
+                                var count=div.getElementsByTagName("span").length-1;
+                                if(count<4){
+                                    this.src="/static/img/select.png";
+
+                                    var seat=document.createElement("span");
+                                    seat.className="label label-danger";
+                                    seat.style="font-size: large";
+                                    seat.id="{{ col.id }}";
+                                    seat.innerText="{{ col.row_id }}排{{ col.col_id }}列";
+                                    div.appendChild(seat);
+                                }else {
+
+                                    alert("一个用户只能购买4张票");
+                                }
+
+                            }
+
+                    };
+                    div_row.appendChild(img);
+                {% endfor %}
+                seats.appendChild(div_row);
+        {% endfor %}
+        };
+
+        function test() {
+            var btn=document.getElementById("ok");
+            var data="";
+
+            $("#show_seats span").each(function (index,item) {
+                if(index>0){
+                    data+=this.id+" ";
+                }
+
+            });
+            btn.href="{% url 'seat_buy' schedule.id%}?id_str="+data;
+
+        }
+
+    </script>
+
+{% endblock %}

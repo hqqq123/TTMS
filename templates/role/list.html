@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}角色列表{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+{#            <script>#}
+{##}
+{#                $('#edit_play').click#}
+{#            </script>#}
+
+          	<h3><i class="fa fa-angle-right"></i> Role List</h3>
+
+
+              <div class="row mt">
+                  <div class="col-md-12">
+                      <div class="content-panel">
+                          <table class="table table-striped table-advance table-hover" >
+	                  	  	  <h4><i class="fa fa-angle-right"></i> 角色列表</h4>
+	                  	  	  <hr>
+                              <thead>
+                              <tr>
+                                  <th style="white-space: nowrap"><i class="fa fa-bullhorn"></i> 编号</th>
+
+                                  <th style="white-space: nowrap"><i class="fa fa-bullhorn"></i> 角色</th>
+{#                                  <th><i class=" fa fa-edit"></i> 主演</th>#}
+                                  <th class="hidden-phone"><i class="fa fa-question-circle"></i> 可执行权限</th>
+
+                                  <th></th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              {% for role in roles %}
+                              <tr>
+                                  <td style="white-space: nowrap"><a href="#">&nbsp;{{ role.id }}</a></td>
+                                  <td style="white-space: nowrap">{{ role.name}} </td>
+
+                                  <td class="hidden-phone">
+                                      {% for auth in role.auths.all %}
+                                          <a href="{% url 'auth_list' %}"><span class="label label-info">{{ auth.name }}</span></a>
+                                      {% endfor %}
+
+                                  </td>
+                                  <td>
+{#                                      <a href="" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>#}
+                                      <a href="{% url 'role_edit' role.id %}" class="btn btn-primary btn-xs"><i class="fa fa-pencil" ></i></a>
+                                      <a href="{% url 'role_delete' role.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+
+                              </tbody>
+                          </table>
+
+                      </div><!-- /content-panel -->
+                  </div><!-- /col-md-12 -->
+              </div><!-- /row -->
+
+      <!--main content end-->
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                      {% if rolesPageObj.has_previous %}
+                    <li >
+                      <a href="{% url 'role_list' %}?page={{ rolesPageObj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% endif %}
+
+                      {% for page in rolesPageObj.paginator.page_range %}
+                          {% if page == rolesPageObj.number %}
+                          <li class="active"><a href="{% url 'role_list' %}?page={{ page }}">{{ page}}</a></li>
+                          {% else %}
+                          <li><a href="{% url 'role_list' %}?page={{ page }}">{{ page}}</a></li>
+                          {% endif %}
+                      {% endfor %}
+
+                    {% if rolesPageObj.has_next %}
+                    <li>
+                      <a href="{% url 'role_list' %}?page={{ rolesPageObj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+{% endblock %}

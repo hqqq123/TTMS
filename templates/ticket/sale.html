@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}售票{% endblock %}
+{% block content %}
+
+
+      <!--main content start-->
+        <h3><i class="fa fa-angle-right"></i> 正在热映</h3>
+    <div class="container">
+    <div class="col-lg-offset-7">
+        <form class="navbar-form navbar-left" method="get" action="{% url 'search' %}">
+            <div class="form-group" >
+                  <input type="text" name="search" class="form-control" placeholder="Search">
+            </div>
+            <input type="submit" class="btn btn-default"></input>
+        </form>
+    </div>
+    </div>
+
+          <div class="row mt">
+          	{% for play in plays %}
+
+					<div class="col-lg-2 col-md-4 col-sm-4 col-xs-12 desc">
+						<div class="project-wrapper">
+		                    <div class="project">
+		                        <div class="photo-wrapper">
+		                            <div class="photo">
+{#                                        <img src="https://p0.meituan.net/moviemachine/f7d2ad70eb79d6d9b8a197713db9b8c41711752.jpg@170w_235h_1e_1c" alt="">#}
+		                            	<a class="fancybox-image"  href="{% url 'ticket_sale' play.id %}"><img id="logo1" class="img-responsive" src="https://p0.meituan.net/moviemachine/f7d2ad70eb79d6d9b8a197713db9b8c41711752.jpg@170w_235h_1e_1c" alt=""></a>
+		                            </div>
+		                            <div class="overlay"></div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div><!-- col-lg-4 -->
+            {% endfor %}
+          </div><!-- /row -->
+
+    <div class="row mt">
+                  <div class="col-md-12">
+                      <div class="content-panel">
+                          <table class="table table-striped table-advance table-hover">
+	                  	  	  <h4> {{ play.name }}&nbsp; &nbsp;<span class="text-warning ">9.1分</span></h4>
+{#                                <p class="navbar-text">Signed in as Mark Otto</p>#}
+                          <div class="container">
+                                  <span class="key ">时长 :</span>
+                                  <span class="value ">{{ play.length }}分钟</span>
+                                    <span class="col-lg-offset-1">类型 :</span>
+                                  <span class="value "> {% for type in play.types.all %} {{ type.name }}  {% endfor %}</span>
+                                    <span class="key col-lg-offset-1">主演 :</span>
+                                  <span class="value "> {{ play.actors }}</span>
+
+                          </div>
+
+	                  	  	  <hr>
+                              <thead>
+                              <tr>
+                                  <th> 放映时间</th>
+                                  <th> 结束时间</th>
+                                  <th> 演播厅</th>
+{#                                  <th><i class=" fa fa-edit"></i> 片长</th>#}
+{#                                  <th><i class=" fa fa-edit"></i> 主演</th>#}
+                                  <th class="hidden-phone"> 价格</th>
+                                  <th></th>
+
+                              </tr>
+                              </thead>
+                              <tbody>
+                              {% for schedule in schedules %}
+                              <tr>
+                                  <td><a href="#">&nbsp;{{ schedule.show_time }}</a></td>
+                                  <td>{{ schedule.end_time }} </td>
+
+                                  <td>{{ schedule.studio.name }} </td>
+                                  <td id="logobtn" class="hidden-phone"><span class="label label-info">{{ schedule.ticket_money }}</span></td>
+                                  <td>
+{#                                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>#}
+{#                                      <a id="edit_play" href="{% url 'play_edit' play.id %}" class="btn btn-primary btn-xs"><i class="fa fa-pencil" ></i></a>#}
+{#                                      <a href="{% url 'play_delete' play.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>#}
+                                      <a href="{% url 'ticket_seat' schedule.id%}" class="btn btn-group-sm btn-danger" >选座购票</a>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+
+                              </tbody>
+                          </table>
+
+                      </div><!-- /content-panel -->
+                  </div><!-- /col-md-12 -->
+              </div><!-- /row -->
+
+
+
+
+
+      <!--main content end-->
+
+
+{% endblock %}

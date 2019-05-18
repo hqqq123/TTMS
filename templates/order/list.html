@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}订单页面{% endblock %}
+{% block content %}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+{#            <script>#}
+{##}
+{#                $('#edit_play').click#}
+{#            </script>#}
+
+          	<h3><i class="fa fa-angle-right"></i> 查看订单</h3>
+
+
+              <div class="row mt">
+                  <div class="col-md-12">
+                      <div class="content-panel">
+                          <table class="table table-striped table-advance table-hover">
+	                  	  	  <h4><i class="fa fa-angle-right"></i> 订单列表</h4>
+	                  	  	  <hr>
+                              <thead>
+                              <tr>
+                                  <th><i class="fa fa-bullhorn"></i> 编号</th>
+
+                                  <th><i class="fa fa-bullhorn"></i> 创建时间</th>
+                                  <th><i class="fa fa-question-circle"></i> 演出厅</th>
+                                  <th><i class="fa fa-bookmark"></i> 剧目</th>
+                                  <th><i class=" fa fa-edit"></i> 演出计划id</th>
+                                  <th><i class=" fa fa-edit"></i> 价格</th>
+{#                                  <th><i class=" fa fa-edit"></i> 主演</th>#}
+                                  <th class="hidden-phone"><i class="fa fa-question-circle"></i> 座位</th>
+                                  <th><i class="fa fa-bookmark"></i> 状态</th>
+
+
+                                  <th></th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              {% for order in orders %}
+                              <tr>
+                                  <td>{{ order.id }}</td>
+                                  <td>{{ order.time}} </td>
+                                  <td>{{ order.schedule.studio.name }} </td>
+                                  <td>{{ order.schedule.play.name }} </td>
+                                  <td><a href="{% url 'schedule_list' %}">{{ order.schedule.id }} </a></td>
+                                  <td>{{ order.money }} </td>
+                                  <td>
+                                      {% for ticket in order.ticket_set.all %}
+                                          <span class="label label-info">{{ ticket.seat.row_id }}排{{ ticket.seat.col_id }}座</span>
+
+                                      {% endfor %}
+                                  </td>
+                                  <td>
+                                      {% if order.status == -1 %}
+                                        已退
+                                      {% elif order.status == 0 %}
+                                        已完成
+                                      {% else %}
+                                        未完成
+                                      {% endif %}
+                                  </td>
+
+{#                                  <td class="hidden-phone"><span class="label label-info">{{ schedule.ticket_counts }}</span></td>#}
+                                  <td>
+{#                                      <a href="" class="btn btn-primary btn-xs"><i class="fa fa-pencil" ></i></a>#}
+                                      <a href="{% url 'order_delete' order.id%}" class="btn btn-danger btn-xs" id="adminDelete" onclick="ensure()"><i class="fa fa-trash-o "></i></a>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+
+                              </tbody>
+                          </table>
+
+                      </div><!-- /content-panel -->
+                  </div><!-- /col-md-12 -->
+              </div><!-- /row -->
+
+      <!--main content end-->
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                      {% if ordersPageObj.has_previous %}
+                    <li >
+                      <a href="{% url 'order_list' %}?page={{ ordersPageObj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                      {% endif %}
+
+                      {% for page in ordersPageObj.paginator.page_range %}
+                          {% if page == ordersPageObj.number %}
+                          <li class="active"><a href="{% url 'order_list' %}?page={{ page }}">{{ page}}</a></li>
+                          {% else %}
+                          <li><a href="{% url 'order_list' %}?page={{ page }}">{{ page}}</a></li>
+                          {% endif %}
+                      {% endfor %}
+
+                    {% if ordersPageObj.has_next %}
+                    <li>
+                      <a href="{% url 'order_list' %}?page={{ ordersPageObj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+    <script type="text/javascript">
+    function ensure() {
+			if(confirm("确定删除吗")){
+				alert("删除成功");
+				return true;
+			}
+			return false;
+    }
+
+   </script>
+{% endblock %}
